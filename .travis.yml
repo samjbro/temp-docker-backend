@@ -1,0 +1,14 @@
+sudo: required
+language: node_js
+node_js:
+  - "7"
+cache: yarn
+services:
+  - docker
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker build -t jfernandes/e2e-backend:$TRAVIS_BUILD_NUMBER .; 
+    docker login --username="$DOCKER_USERNAME" --password="$DOCKER_PASSWORD";
+    docker push jfernandes/e2e-backend:$TRAVIS_BUILD_NUMBER;
+    fi
